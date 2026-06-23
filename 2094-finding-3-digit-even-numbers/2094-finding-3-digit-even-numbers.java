@@ -1,32 +1,19 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 class Solution {
     public int[] findEvenNumbers(int[] digits) {
-        int[] count = new int[10];
-        for (int d : digits) {
-            count[d]++;
-        }       
-        List<Integer> resultList = new ArrayList<>();
-        for (int i = 100; i <= 999; i += 2) {
-            int hundreds = i / 100;
-            int tens = (i / 10) % 10;
-            int ones = i % 10;
-            count[hundreds]--;
-            count[tens]--;
-            count[ones]--;
-            if (count[hundreds] >= 0 && count[tens] >= 0 && count[ones] >= 0) {
-                resultList.add(i);
+        int[] f = new int[10];
+        for (int d : digits) f[d]++;
+        
+        List<Integer> res = new ArrayList<>();
+        for (int i = 100; i < 1000; i += 2) {
+            int h = i / 100, t = (i / 10) % 10, o = i % 10;
+            if (f[h] > 0 && f[t] > (h == t ? 1 : 0) && f[o] > ((h == o ? 1 : 0) + (t == o ? 1 : 0))) {
+                res.add(i);
             }
-            count[hundreds]++;
-            count[tens]++;
-            count[ones]++;
-        }
-        int[] result = new int[resultList.size()];
-        for (int k = 0; k < resultList.size(); k++) {
-            result[k] = resultList.get(k);
         }
         
-        return result;
+        return res.stream().mapToInt(Integer::intValue).toArray();
     }
 }
 
